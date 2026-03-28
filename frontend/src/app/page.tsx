@@ -42,7 +42,7 @@ export default function Dashboard() {
   const premium = ((deal.offer_price_per_share / target.share_price) - 1.0) * 100;
 
   useEffect(() => {
-    fetch("https://mna-backend.onrender.com")
+    fetch("https://mna-backend-fuc7.onrender.com")
       .then(res => res.json())
       .then(data => {
         if (data.message === "Backend Active") console.log("Backend Connected");
@@ -56,7 +56,7 @@ export default function Dashboard() {
       setError("");
       try {
         const payload = { buyer, target, deal };
-        const res = await fetch("https://mna-backend.onrender.com/calculate", {
+        const res = await fetch("https://mna-backend-fuc7.onrender.com/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
