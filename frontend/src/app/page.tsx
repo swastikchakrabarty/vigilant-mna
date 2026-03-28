@@ -42,7 +42,7 @@ export default function Dashboard() {
   const premium = ((deal.offer_price_per_share / target.share_price) - 1.0) * 100;
 
   useEffect(() => {
-    fetch("http://localhost:8000/")
+    fetch("https://mna-backend.onrender.com")
       .then(res => res.json())
       .then(data => {
         if (data.message === "Backend Active") console.log("Backend Connected");
@@ -56,7 +56,7 @@ export default function Dashboard() {
       setError("");
       try {
         const payload = { buyer, target, deal };
-        const res = await fetch("http://localhost:8000/calculate", {
+        const res = await fetch("https://mna-backend.onrender.com/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -117,7 +117,7 @@ export default function Dashboard() {
       )}
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        
+
         {/* LEFT COLUMN: Input Profiles & Deal Terms (5 columns) */}
         <div className="xl:col-span-4 space-y-6">
           <div className="grid grid-cols-2 gap-4">
@@ -190,7 +190,7 @@ export default function Dashboard() {
               </div>
 
               <div className="grid grid-cols-2 gap-6 pt-4 border-t border-zinc-800/50">
-                 <div className="space-y-1">
+                <div className="space-y-1">
                   <Label className="text-xs text-zinc-400 uppercase tracking-wider">Cost of Debt (%)</Label>
                   <Input type="number" step="0.01" value={deal.cost_of_debt * 100} onChange={e => setDeal({ ...deal, cost_of_debt: (parseFloat(e.target.value) || 0) / 100 })} className="bg-zinc-950 border-zinc-800 h-8" />
                 </div>
@@ -205,7 +205,7 @@ export default function Dashboard() {
 
         {/* RIGHT COLUMN: Outputs (8 columns) */}
         <div className="xl:col-span-8 flex flex-col gap-6">
-          
+
           {/* Top Line Metrics */}
           {metrics && (
             <div className="grid grid-cols-3 gap-4">
@@ -242,8 +242,8 @@ export default function Dashboard() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
-             {/* Sources & Uses */}
-             <Card className="bg-zinc-900 border-zinc-800 flex flex-col">
+            {/* Sources & Uses */}
+            <Card className="bg-zinc-900 border-zinc-800 flex flex-col">
               <CardHeader className="pb-3 border-b border-zinc-800">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-zinc-400" />
@@ -268,7 +268,7 @@ export default function Dashboard() {
                         <span className="font-mono text-indigo-400">{formatMillions(metrics.total_sources)}</span>
                       </div>
                     </div>
-                    
+
                     <div className="p-4 flex-1 bg-zinc-900/50">
                       <h4 className="font-semibold text-zinc-300 mb-3 border-b border-zinc-800 pb-1">Uses</h4>
                       <div className="flex justify-between py-1">
@@ -323,7 +323,7 @@ export default function Dashboard() {
                             const opacity = Math.min(Math.abs(val) * 8, 1);
                             const bg = isAcc ? `rgba(16, 185, 129, ${opacity * 0.8 + 0.2})` : `rgba(244, 63, 94, ${opacity * 0.8 + 0.2})`;
                             const textColor = isAcc ? (opacity > 0.5 ? 'text-emerald-950' : 'text-emerald-300') : (opacity > 0.5 ? 'text-rose-950' : 'text-rose-300');
-                            
+
                             return (
                               <td key={mix} className="p-2 border border-zinc-700 text-center font-mono text-xs transition-colors font-bold" style={{ backgroundColor: bg }}>
                                 <span className={textColor}>{dp ? formatPercent(val) : '-'}</span>
@@ -351,7 +351,7 @@ export default function Dashboard() {
                 <p className="text-zinc-300 text-sm leading-relaxed">
                   This transaction is <strong className={metrics.accretion_dilution_percent >= 0 ? "text-emerald-400" : "text-rose-400"}>
                     {Math.abs(metrics.accretion_dilution_percent * 100).toFixed(1)}% {metrics.accretion_dilution_percent >= 0 ? "accretive" : "dilutive"}
-                  </strong>, driven primarily by {formatMillions(deal.pre_tax_synergies)} in pre-tax synergies, a {(deal.cost_of_debt * 100).toFixed(1)}% pre-tax cost of debt, and a {(deal.percent_cash * 100).toFixed(0)}% cash mix. 
+                  </strong>, driven primarily by {formatMillions(deal.pre_tax_synergies)} in pre-tax synergies, a {(deal.cost_of_debt * 100).toFixed(1)}% pre-tax cost of debt, and a {(deal.percent_cash * 100).toFixed(0)}% cash mix.
                   The pro-forma EPS adjusts to {formatCurrency(metrics.pro_forma_eps)} from a standalone base of {formatCurrency(metrics.buyer_standalone_eps)}.
                 </p>
               </CardContent>
